@@ -31,9 +31,12 @@ app.get('/form', function(req, res){
 })
 
 app.post('/recebendoForm', function(req, res){
-    
     res.send(req.body.nome);
 })
+
+app.get('/test', (req, res) =>{
+    res.render('test');
+});
 
 app.listen(8181, function(){
     console.log('Server running...');
