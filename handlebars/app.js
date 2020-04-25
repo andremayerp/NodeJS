@@ -5,6 +5,7 @@ const Sequelize = require('sequelize')
 const bodyParser = require('body-parser');
 const port = 8181;
 const url = require('url');
+const dao = require('./dao/dao.js');
 
 //--CONFIGURANDO ENGINE TEMPLATE
 app.engine('handlebars', handlebars({defaultLayout: 'main'}));
@@ -54,10 +55,34 @@ let icons = (req, res) =>{
     res.render('iconsbar');
 }
 
+let getBackToFront = (req, res) => {
+    res.render('backToFront', {nome: 'andre', idade: 25, profissao: 'programador'});
+}
 
+let getCadastrarUsuario = (req, res) => {
+    res.render('cadastro-usuario');
+}
+
+let postCadastrarUsuario = (req, res) => {
+    let usuario = {};
+    usuario.login = req.body.login;
+    usuario.senha = req.body.senha;
+    usuario.email = req.body.email;
+    
+    dao.usuario.create(usuario).then(usr=>{
+        console.log(usr.toJSON());
+    }).catch(err => {
+        throw err;
+    });
+
+    res.send('sucesso');
+}
 
 app.post('/recebendoForm', postRecebendoForm);
+app.post('/cadastrarUsuario', postCadastrarUsuario);
 
+app.get('/cadastrarUsuario', getCadastrarUsuario);
+app.get('/backtofront', getBackToFront);
 app.get('/form', getForm);
 app.get('/test', getTest);
 app.get('/javascript', getJavaScript);
